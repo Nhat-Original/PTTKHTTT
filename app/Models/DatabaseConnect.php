@@ -2,5 +2,5 @@
 
 $GLOBALS['servername'] = "localhost:3306";
 $GLOBALS['username'] = "root";
-$GLOBALS['password'] = "root";
+$GLOBALS['password'] = "";
 $GLOBALS['dbname'] = "coursesdb";
