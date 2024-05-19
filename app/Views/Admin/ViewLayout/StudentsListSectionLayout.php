@@ -9,27 +9,14 @@
 </head>
 
 <body>
-
     <?php
-
     use App\Models\HocVienModel;
 
     if (!session()->has('id_user')) {
         return redirect()->to('/');
-    }
-        // Pagination settings
-        $recordsPerPage = 20; 
-        $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
-        $offset = ($currentPage - 1) * $recordsPerPage;
-        $students = $model->executeCustomQuery(
-            "SELECT hoc_vien.id_hoc_vien, hoc_vien.ho_ten, hoc_vien.gioi_tinh, DATE_FORMAT(hoc_vien.ngay_sinh, '%d/%m/%Y') as ngay_sinh, hoc_vien.email FROM hoc_vien order by hoc_vien.id_hoc_vien ASC LIMIT $recordsPerPage OFFSET $offset "
-        );
-        $totalStudents = $model->executeCustomQuery("SELECT COUNT(*) as total FROM hoc_vien")[0]['total'];
-        $totalPages = ceil($totalStudents / $recordsPerPage);
-
-    $model = new HocVienModel();
-
+    }        
     // Pagination settings
+    $model = new HocVienModel();
     $recordsPerPage = 20;
     $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
     $offset = ($currentPage - 1) * $recordsPerPage;
@@ -68,17 +55,6 @@
                     <th class="text-center text-white bg-dark"></th>
                 </tr>
             </thead>
-            <tbody>
-                <?php foreach ($students as $student): ?>
-                    <tr>
-                        <th class="text-center text-white bg-dark">Mã học viên</th>
-                        <th class="text-center text-white bg-dark">Họ tên</th>
-                        <th class="text-center text-white bg-dark">Giới tính</th>
-                        <th class="text-center text-white bg-dark">Ngày sinh</th>
-                        <th class="text-center text-white bg-dark">Email</th>
-                        <th class="text-center text-white bg-dark"></th>
-                    </tr>
-                </thead>
                 <tbody>
                     <?php foreach ($students as $student) : ?>
                         <tr>

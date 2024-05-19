@@ -7,7 +7,7 @@
         <div style="height: 30px;" class="class__search me-2 d-flex justify-content-end">
 
             <input style="border-radius: 0; height: 30px; width: 90px; z-index: 3" type="text" class="w-25 form-control search-input" placeholder="Tìm khóa học">
-            <button class="btn btn-info search-button highlight-button"><i class="fas fa-search icon-search highlight-icon" style=""></i></button>
+            <button class="btn btn-info search-button highlight-button"><i class="fas fa-search icon-search highlight-icon"></i></button>
             
 
             </div>
@@ -21,7 +21,7 @@
                     $dsgv = "";
                     $y = 0;
                     foreach ($courses[$i]['lecturers'] as $lecturer) {
-                        $dsgv = $dsgv . ($y != 0 ? ', ' : '') . '<a href="' . base_url() . '/profile/lecturerS?id=' . $lecturer["id_giang_vien"] . '">' . $lecturer["ho_ten"] . '</a>';
+                        $dsgv = $dsgv . ($y != 0 ? ', ' : '') . '<a href="' . base_url() . '/profile/lecturer?id=' . $lecturer["id_giang_vien"] . '">' . $lecturer["ho_ten"] . '</a>';
                         $y++;
                     }
                     $status = kiem_tra_tinh_trang($courses[$i]['ngay_bat_dau'], $courses[$i]['ngay_ket_thuc']);
@@ -187,7 +187,7 @@
             console.log('ready');
 
             $(document).on('click', '.class-div', function() {
-                window.location.href = `<?php echo base_url(); ?>/courses/information?courseid=${$(this).parent().attr('courseid')}`;
+                window.location.href = `<?php echo base_url(); ?>courses/information?courseid=${$(this).parent().attr('courseid')}`;
             });
             $(document).on('click', '.delete-checkbox', function(event) {
                 event.stopPropagation();

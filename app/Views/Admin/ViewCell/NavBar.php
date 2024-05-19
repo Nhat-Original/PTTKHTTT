@@ -23,20 +23,20 @@
             </div>
             <div class="top-nav__drop-down">
                 <img id="avatar" src="<?php 
-                    if ($avatar_data != null) {
+                    if (isset($avatar_data) && $avatar_data != null) {
                         $base64Image = base64_encode($avatar_data);
                         echo "data:image/png;base64," . $base64Image;
                     }  else {
                         echo base_url()."assets/img/avatar_blank.jpg";
                     }
                     ?>" alt="">
-                <span id="name"><?php echo $username?></span>
+                <span id="name"><?php if(isset($username)) echo $username?></span>
                 <img id="drop-down-icon" src="<?php base_url() ?>/assets/img/caret_down.png" alt="">
             </div>
             <div style="position: relative;">
                 <div class="profile-pop-up">
                     <img id="ava" src="<?php 
-                    if ($avatar_data != null) {
+                    if (isset($avatar_data) && $avatar_data != null) {
                         $base64Image = base64_encode($avatar_data);
                         echo "data:image/png;base64," . $base64Image;
                     }  else {
@@ -44,8 +44,8 @@
                     }
                     ?>
                         " alt="">
-                    <p id="name"><?php echo $username?></p>
-                    <p id="role"><?php echo $role?></p>
+                    <p id="name"><?php if(isset($username)) echo $username?></p>
+                    <p id="role"><?php if(isset($role)) echo $role?></p>
                     <a href="">
                         <img src="" alt="">
                         Hồ sơ của tôi

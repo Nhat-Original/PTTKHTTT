@@ -64,7 +64,7 @@
     </style>
 </head>
 <body>
-    <?php echo $navbar ?>
+    <?php if(isset($navbar)) echo $navbar ?>
     <div class="container-fluid" style="margin-top: 65px;">
         <div class="logo card p-4 m-2 shadow-sm">
             <div class="row">
@@ -80,7 +80,7 @@
                 <div class="col-6 border-start">
                     <div class="card-body">
                         <div class="card-title mb-1 fs-4 fw-bold">Giới tính: </div>
-                        <p class="sex fs-5"><?php echo (isset($user->gioi_tinh) && $user->gioi_tinh == 1) ? 'Nam' : 'Nữ' ?></p>
+                        <p class="sex fs-5"><?php echo (isset($user->gioi_tinh) ? (($user->gioi_tinh == 1) ? 'Nam' : 'Nữ') : 'Error') ?></p>
                         <div class="card-title mb-1 fs-4 fw-bold">Email: </div>
                         <p class="email fs-5"><?php echo isset($user->email) ? $user->email: 'Error' ?></p>
                     </div>
@@ -119,7 +119,7 @@
 
                         <?php
                             echo "<div class='row'>";
-                            $n = count($attend);
+                            $n = count(isset($attend) ? $attend : []);
                             for ($i = 0; $i < ($n <= 4 ? $n : 4); $i++) {
                                 $statusCode = kiem_tra_tinh_trang($attend[$i]->ngay_bat_dau, $attend[$i]->ngay_ket_thuc);
                                 $status = getStatus($statusCode);
