@@ -3,8 +3,11 @@
 namespace App\Controllers;
 use App\Models\UserModel;
 use App\Models\GiangVienModel;
+use App\Models\HocVienModel;
 use App\Models\phan_cong_giang_vienModel;
+use App\Models\hoc_vien_tham_giaModel;
 use DateTime;
+
 class ProfileController extends BaseController
 {
     public function index($role)
@@ -38,7 +41,11 @@ class ProfileController extends BaseController
         } else {
             // hoc vien
             $id_hoc_vien = $_GET['id'];
-            return view('ProfilePage');
+            $hocVienModel = new HocVienModel();
+            $thamgia = new hoc_vien_tham_giaModel();
+            $data['user'] = $hocVienModel->getHocVienById($id_hoc_vien);
+            $data['id'] = $id_hoc_vien;
+            return view('ProfilePage', $data);
         }
     }
 }
