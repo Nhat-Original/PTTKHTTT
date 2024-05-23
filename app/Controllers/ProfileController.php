@@ -70,13 +70,7 @@ class ProfileController extends BaseController
 
             $data['user'] = $hocVienModel->getHocVienById($id_hoc_vien);
             $data['id'] = $id_hoc_vien;
-            $data['attend'] = $thamgia->executeCustomQuery(
-                "SELECT lh.id_lop_hoc, mh.id_mon_hoc, mh.ten_mon_hoc, lh.ngay_bat_dau, lh.ngay_ket_thuc
-                FROM hoc_vien_tham_gia tg, lop_hoc lh, mon_hoc mh
-                WHERE tg.id_hoc_vien = $id_hoc_vien
-                AND tg.id_lop_hoc = lh.id_lop_hoc
-                AND mh.id_mon_hoc = lh.id_mon_hoc
-            ");
+            $data['attend'] = $thamgia->getThamGiaByIDHocVien($id_hoc_vien);       
             $data['role_name'] = "Học viên";
 
             return view('ProfilePage', $data);

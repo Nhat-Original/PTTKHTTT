@@ -59,6 +59,42 @@ class hoc_vien_tham_giaModel
         return $users;
     }
 
+    function getThamGiaByIDHocVien($id_hoc_vien) {
+      $this->conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
+        if ($this->conn->connect_error) {
+            die("Kết nối đến cơ sở dữ liệu thất bại: " . $this->conn->connect_error);
+        }
+        $id_hoc_vien = $this->conn->real_escape_string($id_hoc_vien);
+        $sql = "SELECT lh.id_lop_hoc, mh.id_mon_hoc, mh.ten_mon_hoc, lh.ngay_bat_dau, lh.ngay_ket_thuc
+                FROM hoc_vien_tham_gia tg, lop_hoc lh, mon_hoc mh
+                WHERE tg.id_hoc_vien = $id_hoc_vien
+                AND tg.id_lop_hoc = lh.id_lop_hoc
+                AND mh.id_mon_hoc = lh.id_mon_hoc";
+        $result = $this->conn->query($sql);
+        $thamGias = [];
+        if($result->num_rows > 0){
+            while($row = $result->fetch_assoc()){
+                $info = new class{
+                    public $id_lop_hoc;
+                    public $id_mon_hoc;
+                    public $ten_mon_hoc;
+                    public $ngay_bat_dau;
+                    public $ngay_ket_thuc;
+                };
+
+                $info->id_lop_hoc = $row["id_lop_hoc"];
+                $info->id_mon_hoc = $row["id_mon_hoc"];
+                $info->ten_mon_hoc = $row["ten_mon_hoc"];
+                $info->ngay_bat_dau = $row["ngay_bat_dau"];
+                $info->ngay_ket_thuc = $row["ngay_ket_thuc"];
+
+                $thamGias[] = $info;
+            }
+        }
+        $this->conn->close();
+        return $thamGias;
+    }
+
     function executeCustomQuery($sql)
     {
         $this->conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
