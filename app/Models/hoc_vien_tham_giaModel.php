@@ -59,7 +59,7 @@ class hoc_vien_tham_giaModel
         return $users;
     }
 
-    function queryDatabase($sql)
+    function executeCustomQuery($sql)
     {
         $this->conn = new mysqli($GLOBALS['servername'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbname']);
         if ($this->conn->connect_error) {

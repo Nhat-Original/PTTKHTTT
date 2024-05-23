@@ -8,8 +8,13 @@ use App\Models\UserModel;
 
 class LoginController extends BaseController
 {
-    public function index(): string
+    public function index()
     {
+        $session = session();
+
+        if($session && ($session->get('role') == 1 || $session->get('role') == 2 || $session->get('role') == 3)) {
+            return redirect()->to('/courses');
+        } 
 
         return view('LoginPage');
     }
@@ -107,6 +112,7 @@ class LoginController extends BaseController
         $session = session();
         $session->remove('id_user');
         $session->remove('role');
+        $session->remove('id_role');
 
         // Unset all session variables
         $session->destroy();

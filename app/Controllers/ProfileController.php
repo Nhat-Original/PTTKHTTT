@@ -10,12 +10,47 @@ use DateTime;
 
 class ProfileController extends BaseController
 {
-    public function index($role)
+    public function index($roleName = 'lecturer')
     {
         $data = [];
         $model = new UserModel();
         $navbar_data = array();
-        if ($role == "true") {
+
+        if (session()->get('role') == 1) { // Admin
+            $result = $model->executeCustomQuery(
+                'SELECT ad.ho_ten, users.anh_dai_dien
+                FROM users
+                INNER JOIN ad ON users.id_ad = ad.id_ad
+                WHERE users.id_user = ' . session()->get("id_user")
+            );
+            $navbar_data['username'] = "{$result[0]['ho_ten']}";
+            $navbar_data['role'] = 'Adminstrator';
+            $navbar_data['avatar_data'] = "{$result[0]['anh_dai_dien']}";
+        } else if (session()->get('role') == 2) { // Lecturer
+            $result = $model->executeCustomQuery(
+                'SELECT gv.ho_ten, users.anh_dai_dien
+                FROM users
+                INNER JOIN giang_vien gv ON users.id_giang_vien = gv.id_giang_vien
+                WHERE users.id_user = ' . session()->get("id_user")
+            );
+            $navbar_data['username'] = "{$result[0]['ho_ten']}";
+            $navbar_data['role'] = 'Giảng viên';
+            $navbar_data['avatar_data'] = "{$result[0]['anh_dai_dien']}";
+        } else if (session()->get('role') == 3) { // Student
+            $result = $model->executeCustomQuery(
+                'SELECT hv.ho_ten, users.anh_dai_dien
+                FROM users
+                INNER JOIN hoc_vien hv ON users.id_hoc_vien = hv.id_hoc_vien
+                WHERE users.id_user = ' . session()->get("id_user")
+            );
+            $navbar_data['username'] = "{$result[0]['ho_ten']}";
+            $navbar_data['role'] = 'Học viên';
+            $navbar_data['avatar_data'] = "{$result[0]['anh_dai_dien']}";
+        }
+
+        $data['navbar'] = view('Admin\ViewCell\NavBar', $navbar_data);
+
+        if ($roleName == "lecturer") {
             // giang vien
             $teacherID = $_GET['id'];
             $lecturersModel = new GiangVienModel(); 
@@ -24,27 +59,26 @@ class ProfileController extends BaseController
             $data['id'] = $teacherID;
             $data['user'] = $lecturersModel->getGiangVienById($teacherID);
             $data['attend'] = $phancong->getPhanCongByIDGiangVien($teacherID);
-            if (session()->get('role') == 1) { // Admin
-                $result = $model->executeCustomQuery(
-                    'SELECT ad.ho_ten, users.anh_dai_dien
-                    FROM users
-                    INNER JOIN ad ON users.id_ad = ad.id_ad
-                    WHERE users.id_user = ' . session()->get("id_user")
-                );
-                $navbar_data['username'] = "{$result[0]['ho_ten']}";
-                $navbar_data['role'] = 'Adminstrator';
-                $navbar_data['avatar_data'] = "{$result[0]['anh_dai_dien']}";
-            }
-            $data['navbar'] = view('Admin\ViewCell\NavBar', $navbar_data);
-            return view('ProfilePage', $data);
+            $data['role_name'] = "Giảng viên";
             
+            return view('ProfilePage', $data);
         } else {
             // hoc vien
             $id_hoc_vien = $_GET['id'];
             $hocVienModel = new HocVienModel();
             $thamgia = new hoc_vien_tham_giaModel();
+
             $data['user'] = $hocVienModel->getHocVienById($id_hoc_vien);
             $data['id'] = $id_hoc_vien;
+            $data['attend'] = $thamgia->executeCustomQuery(
+                "SELECT lh.id_lop_hoc, mh.id_mon_hoc, mh.ten_mon_hoc, lh.ngay_bat_dau, lh.ngay_ket_thuc
+                FROM hoc_vien_tham_gia tg, lop_hoc lh, mon_hoc mh
+                WHERE tg.id_hoc_vien = $id_hoc_vien
+                AND tg.id_lop_hoc = lh.id_lop_hoc
+                AND mh.id_mon_hoc = lh.id_mon_hoc
+            ");
+            $data['role_name'] = "Học viên";
+
             return view('ProfilePage', $data);
         }
     }

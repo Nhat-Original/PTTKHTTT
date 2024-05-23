@@ -47,31 +47,11 @@ class UsersController extends BaseController
         $currentPage = $this->request->getVar("page");
         $model = new UserModel();
         $recordsPerPage = 20;
-        $offset = ($currentPage - 1) * $recordsPerPage;
         
-        $users = $model->executeCustomQuery(
-            "(
-                SELECT users.*, ad.ho_ten, ad.email
-                FROM users
-                INNER JOIN ad ON users.id_ad = ad.id_ad AND users.id_ad IS NOT NULL
-                ORDER BY users.id_ad ASC
-            )
-            UNION
-            (
-                SELECT users.*, giang_vien.ho_ten, giang_vien.email
-                FROM users
-                INNER JOIN giang_vien ON users.id_giang_vien = giang_vien.id_giang_vien AND users.id_giang_vien IS NOT NULL
-                ORDER BY users.id_giang_vien ASC
-            )
-            UNION
-            (
-                SELECT users.*, hoc_vien.ho_ten, hoc_vien.email
-                FROM users
-                INNER JOIN hoc_vien ON users.id_hoc_vien = hoc_vien.id_hoc_vien AND users.id_hoc_vien IS NOT NULL
-                ORDER BY users.id_hoc_vien ASC
-            ) LIMIT $recordsPerPage OFFSET $offset "
-        );
-    
+        $users = $model->executeCustomQuery("
+          CALL proc_lay_danh_sach_user_2($currentPage, $recordsPerPage)
+        ");
+
         // Base64 encode the 'anh_dai_dien' field for each user
         foreach ($users as &$user) {
             if ($user["anh_dai_dien"] != null)
@@ -80,26 +60,9 @@ class UsersController extends BaseController
     
         $data["users"] = $users;
     
-        $totalUsers = count($model->executeCustomQuery("(
-            SELECT users.*, ad.ho_ten, ad.email
-            FROM users
-            INNER JOIN ad ON users.id_ad = ad.id_ad AND users.id_ad IS NOT NULL
-            ORDER BY users.id_ad ASC
-        )
-        UNION
-        (
-            SELECT users.*, giang_vien.ho_ten, giang_vien.email
-            FROM users
-            INNER JOIN giang_vien ON users.id_giang_vien = giang_vien.id_giang_vien AND users.id_giang_vien IS NOT NULL
-            ORDER BY users.id_giang_vien ASC
-        )
-        UNION
-        (
-            SELECT users.*, hoc_vien.ho_ten, hoc_vien.email
-            FROM users
-            INNER JOIN hoc_vien ON users.id_hoc_vien = hoc_vien.id_hoc_vien AND users.id_hoc_vien IS NOT NULL
-            ORDER BY users.id_hoc_vien ASC
-        )"));
+        $totalUsers = count($model->executeCustomQuery("
+          CALL proc_lay_danh_sach_user_1()
+        "));
     
         $data["totalUsers"] = $totalUsers;
     

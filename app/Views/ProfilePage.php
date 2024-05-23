@@ -83,6 +83,8 @@
                         <p class="sex fs-5"><?php echo (isset($user->gioi_tinh) ? (($user->gioi_tinh == 1) ? 'Nam' : 'Nữ') : 'Error') ?></p>
                         <div class="card-title mb-1 fs-4 fw-bold">Email: </div>
                         <p class="email fs-5"><?php echo isset($user->email) ? $user->email: 'Error' ?></p>
+                        <div class="card-title mb-1 fs-4 fw-bold">Vai trò: </div>
+                        <p class="sex fs-5"><?php echo (isset($role_name) ? ($role_name) : 'Error') ?></p>
                     </div>
                 </div>
                 

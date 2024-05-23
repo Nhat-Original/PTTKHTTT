@@ -2010,7 +2010,7 @@ class CoursesController extends BaseController
                     INNER JOIN hoc_vien hv ON dd.id_hoc_vien = hv.id_hoc_vien
                     WHERE dd.id_buoi_hoc = $idBuoiHoc;
                     ";
-                    $tatCaBuoiHoc['hv_tg'] = $hocvien_tg->queryDatabase($sql);
+                    $tatCaBuoiHoc['hv_tg'] = $hocvien_tg->executeCustomQuery($sql);
                     $left_menu_data["class_name"] = $course[0]["ten_mon_hoc"] . " " . $course_id_mon_hoc . "." . $course_id_lop_hoc;
                     $tatCaBuoiHoc['class_name'] = $left_menu_data["class_name"];
                     return view('SchedulePage', $tatCaBuoiHoc);
@@ -2090,7 +2090,7 @@ class CoursesController extends BaseController
         INNER JOIN hoc_vien hv ON dd.id_hoc_vien = hv.id_hoc_vien
         WHERE dd.id_buoi_hoc = $idBuoiHoc;
         ";
-        $tatCaBuoiHoc['hv_tg'] = $hocvien_tg->queryDatabase($sql);
+        $tatCaBuoiHoc['hv_tg'] = $hocvien_tg->executeCustomQuery($sql);
         $left_menu_data["class_name"] = $course[0]["ten_mon_hoc"] . " " . $course_id_mon_hoc . "." . $course_id_lop_hoc;
         $tatCaBuoiHoc['class_name'] = $left_menu_data["class_name"];
         return view('SchedulePage', $tatCaBuoiHoc);
@@ -2123,7 +2123,7 @@ class CoursesController extends BaseController
                         INNER JOIN ca c ON c.id_ca = bh.id_ca
                         WHERE dd.id_buoi_hoc = $idofBuoihoc;";
         
-            $ResAtten = $hocvien_tgbybuoi->queryDatabase($sqlbyid);
+            $ResAtten = $hocvien_tgbybuoi->executeCustomQuery($sqlbyid);
             return $this->response->setJSON($ResAtten);
         }
 
@@ -2193,7 +2193,7 @@ $sqlio = "SELECT dd.*, hv.*, bh.* FROM diem_danh dd
          WHERE dd.id_buoi_hoc =  $IDok";
 
 // Thực hiện truy vấn SQL
-$datatrave = $buoidautien->queryDatabase($sqlio);
+$datatrave = $buoidautien->executeCustomQuery($sqlio);
             return $this->response->setJSON($datatrave);
         }
         
