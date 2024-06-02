@@ -631,9 +631,7 @@ class CoursesController extends BaseController
             );
             for ($i = 0; $i < count($courses); $i++) {
                 $courses[$i]['lecturers'] = $model->executeCustomQuery(
-                    "SELECT giang_vien.id_giang_vien, giang_vien.ho_ten
-                    FROM phan_cong_giang_vien INNER JOIN giang_vien ON phan_cong_giang_vien.id_giang_vien = giang_vien.id_giang_vien
-                    WHERE phan_cong_giang_vien.id_lop_hoc = {$courses[$i]['id_lop_hoc']};"
+                    "CALL proc_lay_danh_sach_ten_giang_vien_thuoc_lop_hoc({$courses[$i]['id_lop_hoc']})"
                 );
             }
             usort($courses, [$this, 'compareCoursesByBeginDate']);
@@ -654,15 +652,11 @@ class CoursesController extends BaseController
             $main_layout_data['navbar'] = view('Admin\ViewCell\NavBar', $navbar_data);
             // courses
             $courses = $model->executeCustomQuery(
-                "SELECT lop_hoc.id_lop_hoc,  DATE_FORMAT(lop_hoc.ngay_bat_dau, '%d/%m/%Y') as ngay_bat_dau,  DATE_FORMAT(lop_hoc.ngay_ket_thuc, '%d/%m/%Y') as ngay_ket_thuc, mon_hoc.id_mon_hoc, mon_hoc.ten_mon_hoc
-                FROM lop_hoc 
-                INNER JOIN mon_hoc on lop_hoc.id_mon_hoc = mon_hoc.id_mon_hoc where lop_hoc.id_lop_hoc in (select phan_cong_giang_vien.id_lop_hoc from phan_cong_giang_vien where phan_cong_giang_vien.id_giang_vien = {$result[0]['id_giang_vien']})"
+                "CALL proc_lay_danh_sach_lop_hoc_theo_giang_vien({$result[0]['id_giang_vien']})"
             );
             for ($i = 0; $i < count($courses); $i++) {
                 $courses[$i]['lecturers'] = $model->executeCustomQuery(
-                    "SELECT giang_vien.id_giang_vien, giang_vien.ho_ten
-                    FROM phan_cong_giang_vien INNER JOIN giang_vien ON phan_cong_giang_vien.id_giang_vien = giang_vien.id_giang_vien
-                    WHERE phan_cong_giang_vien.id_lop_hoc = {$courses[$i]['id_lop_hoc']};"
+                    "CALL proc_lay_danh_sach_ten_giang_vien_thuoc_lop_hoc({$courses[$i]['id_lop_hoc']})"
                 );
             }
             usort($courses, [$this, 'compareCoursesByBeginDate']);
@@ -682,15 +676,11 @@ class CoursesController extends BaseController
             $main_layout_data['navbar'] = view('Admin\ViewCell\NavBar', $navbar_data);
             // courses
             $courses = $model->executeCustomQuery(
-                "SELECT lop_hoc.id_lop_hoc,  DATE_FORMAT(lop_hoc.ngay_bat_dau, '%d/%m/%Y') as ngay_bat_dau,  DATE_FORMAT(lop_hoc.ngay_ket_thuc, '%d/%m/%Y') as ngay_ket_thuc, mon_hoc.id_mon_hoc, mon_hoc.ten_mon_hoc
-                FROM lop_hoc 
-                INNER JOIN mon_hoc on lop_hoc.id_mon_hoc = mon_hoc.id_mon_hoc where lop_hoc.id_lop_hoc in (select hoc_vien_tham_gia.id_lop_hoc from hoc_vien_tham_gia where hoc_vien_tham_gia.id_hoc_vien = {$result[0]['id_hoc_vien']})"
+                "CALL proc_lay_danh_sach_lop_hoc_theo_hoc_vien({$result[0]['id_hoc_vien']})"
             );
             for ($i = 0; $i < count($courses); $i++) {
                 $courses[$i]['lecturers'] = $model->executeCustomQuery(
-                    "SELECT giang_vien.id_giang_vien, giang_vien.ho_ten
-                    FROM phan_cong_giang_vien INNER JOIN giang_vien ON phan_cong_giang_vien.id_giang_vien = giang_vien.id_giang_vien
-                    WHERE phan_cong_giang_vien.id_lop_hoc = {$courses[$i]['id_lop_hoc']};"
+                    "CALL proc_lay_danh_sach_ten_giang_vien_thuoc_lop_hoc({$courses[$i]['id_lop_hoc']})"
                 );
             }
             usort($courses, [$this, 'compareCoursesByBeginDate']);
